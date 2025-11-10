@@ -5,6 +5,7 @@ A modern, production-ready template for building headless WordPress applications
 ## 🚀 Features
 
 - **Next.js 15** - Latest React framework with App Router, SSR, SSG, and ISR
+- **React 19** - Latest React version with improved performance and features
 - **Bun Runtime** - Fast JavaScript runtime for optimal performance
 - **Python FastAPI** - Middleware layer for business logic, caching, and API orchestration
 - **WordPress CMS** - Powerful content management with REST API
@@ -95,7 +96,7 @@ Browser → Next.js (SSR/SSG) → Python API → WordPress REST API
 ```
 
 **Three-tier architecture:**
-1. **Presentation Layer** (Next.js + React): UI/UX and rendering
+1. **Presentation Layer** (Next.js 15 + React 19): UI/UX and rendering
 2. **Business Logic Layer** (Python FastAPI): Caching, transformation, orchestration
 3. **Content Layer** (WordPress): CMS and data storage
 
