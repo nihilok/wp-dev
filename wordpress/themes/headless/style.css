@@ -1,0 +1,15 @@
+/*
+Theme Name: Headless WordPress Theme
+Theme URI: https://github.com/nihilok/wp-dev
+Description: Minimal theme for headless WordPress setup with Next.js frontend
+Author: WP-Dev Team
+Version: 1.0.0
+License: MIT
+Text Domain: headless
+*/
+
+/*
+This is a minimal theme for headless WordPress.
+All rendering is handled by the Next.js frontend.
+This theme only satisfies WordPress theme requirements.
+*/

@@ -1,0 +1,31 @@
+{
+  "name": "wp-dev-template",
+  "version": "1.0.0",
+  "description": "Headless WordPress template with Next.js, Python middleware, and CLI tooling",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "cli",
+    "components"
+  ],
+  "scripts": {
+    "dev": "bun run --filter frontend dev",
+    "build": "bun run --filter frontend build",
+    "start": "bun run --filter frontend start",
+    "cli": "bun run cli/bin/wp-dev.js",
+    "backend": "cd backend && python -m uvicorn main:app --reload",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "keywords": [
+    "wordpress",
+    "headless",
+    "nextjs",
+    "fastapi",
+    "bun",
+    "react"
+  ],
+  "author": "",
+  "license": "MIT"
+}
