@@ -87,7 +87,7 @@ This document describes the architecture of the headless WordPress template with
 
 **Key Files:**
 - `backend/main.py` - API endpoints and logic
-- `backend/requirements.txt` - Python dependencies
+- `backend/pyproject.toml` - Python dependencies (managed with uv)
 
 **Why Python?**
 - Excellent for data processing

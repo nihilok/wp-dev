@@ -1,10 +1,8 @@
 version: '3.8'
 
 services:
-  # WordPress with MySQL
   wordpress:
     image: wordpress:latest
-    container_name: wp-dev-wordpress
     ports:
       - "8080:80"
     environment:
@@ -13,20 +11,15 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DEBUG: 1
     volumes:
-      - wordpress_data:/var/www/html
       - ./wordpress/themes:/var/www/html/wp-content/themes
       - ./wordpress/plugins:/var/www/html/wp-content/plugins
+      - wordpress_data:/var/www/html
     depends_on:
       - db
-    networks:
-      - wp-network
 
-  # MySQL Database
   db:
     image: mysql:8.0
-    container_name: wp-dev-db
     environment:
       # NOTE: Change these credentials for production deployments!
       MYSQL_DATABASE: wordpress
@@ -35,41 +28,34 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - wp-network
 
-  # Python FastAPI Middleware
-  python-api:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: wp-dev-python-api
     ports:
       - "8000:8000"
     environment:
       WP_API_URL: http://wordpress:80/wp-json/wp/v2
       CACHE_ENABLED: "true"
-    volumes:
-      - ./backend:/app
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGINS: '["http://localhost:3000"]'
     depends_on:
       - wordpress
-    networks:
-      - wp-network
+      - redis
+    volumes:
+      - ./backend:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-
-  # Redis for caching (optional)
-  redis:
-    image: redis:alpine
-    container_name: wp-dev-redis
-    ports:
-      - "6379:6379"
-    networks:
-      - wp-network
 
 volumes:
   wordpress_data:
   db_data:
+  redis_data:
 
-networks:
-  wp-network:
-    driver: bridge

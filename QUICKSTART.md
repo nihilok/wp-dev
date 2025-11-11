@@ -8,6 +8,7 @@ Make sure you have installed:
 - [Bun](https://bun.sh/) - Fast JavaScript runtime
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - For WordPress & MySQL
 - [Python 3.11+](https://www.python.org/downloads/)
+- [uv](https://github.com/astral-sh/uv) - Fast Python package manager
 
 ## Step 1: Clone and Setup (2 minutes)
 
@@ -21,11 +22,11 @@ cd frontend
 bun install
 cd ..
 
-# Install Python dependencies
+# Install Python dependencies with uv
 cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+uv pip install -e .
 cd ..
 ```
 
@@ -62,8 +63,8 @@ Open 2 terminal windows:
 **Terminal 1 - Python API:**
 ```bash
 cd backend
-source venv/bin/activate  # If not activated
-python -m uvicorn main:app --reload
+source .venv/bin/activate  # If not activated
+uvicorn main:app --reload
 ```
 
 **Terminal 2 - Next.js Frontend:**
@@ -169,10 +170,10 @@ docker-compose restart
 ```bash
 # Recreate virtual environment
 cd backend
-rm -rf venv
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+rm -rf .venv
+uv venv
+source .venv/bin/activate
+uv pip install -e .
 ```
 
 ## Production Deployment

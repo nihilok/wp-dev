@@ -7,6 +7,7 @@ Welcome to the Headless WordPress + Next.js + Python template! This guide will h
 - [Bun](https://bun.sh/) - JavaScript runtime (v1.0+)
 - [Docker](https://www.docker.com/) - For WordPress and database
 - [Python](https://www.python.org/) - For middleware (v3.11+)
+- [uv](https://github.com/astral-sh/uv) - Python package manager
 - [Node.js](https://nodejs.org/) - Optional, for npm packages (v18+)
 
 ## Quick Start
@@ -28,11 +29,11 @@ cd cli
 bun install
 cd ..
 
-# Install Python dependencies
+# Install Python dependencies with uv
 cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -e .
 cd ..
 ```
 
@@ -92,7 +93,7 @@ wp-dev/
 │
 ├── backend/           # Python FastAPI middleware
 │   ├── main.py       # API endpoints
-│   └── requirements.txt
+│   └── pyproject.toml # Python dependencies (uv)
 │
 ├── components/        # Shared React components
 │   ├── PostCard.tsx  # WordPress post component
