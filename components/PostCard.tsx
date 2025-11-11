@@ -9,6 +9,7 @@
  */
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export interface PostCardProps {
   id: number
@@ -31,8 +32,14 @@ export const PostCard: React.FC<PostCardProps> = ({
   return (
     <article className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
       {featuredImage && (
-        <div className="aspect-video bg-gray-200">
-          <img src={featuredImage} alt={title} className="w-full h-full object-cover" />
+        <div className="aspect-video bg-gray-200 relative">
+          <Image 
+            src={featuredImage} 
+            alt={`Featured image for ${title}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
       )}
       <div className="p-6">

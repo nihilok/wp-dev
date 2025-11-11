@@ -43,8 +43,14 @@ add_action('after_setup_theme', 'headless_theme_setup');
 function headless_add_cors_headers() {
     $origin = get_http_origin();
     
-    // Allow localhost for development
-    if ($origin === 'http://localhost:3000' || $origin === 'http://localhost:8000') {
+    // Get allowed origins from WordPress option or use defaults
+    // For production, set this via wp-admin or wp-config.php:
+    // define('HEADLESS_ALLOWED_ORIGINS', 'https://yourdomain.com,https://www.yourdomain.com');
+    $allowed_origins = defined('HEADLESS_ALLOWED_ORIGINS') 
+        ? explode(',', HEADLESS_ALLOWED_ORIGINS)
+        : ['http://localhost:3000', 'http://localhost:8000'];
+    
+    if (in_array($origin, $allowed_origins)) {
         header("Access-Control-Allow-Origin: $origin");
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -130,6 +136,11 @@ add_filter('excerpt_more', 'headless_excerpt_more');
 
 /**
  * Allow SVG uploads
+ * 
+ * WARNING: SVG files can contain JavaScript and pose XSS security risks.
+ * Only enable this if you trust all users who can upload files.
+ * Consider implementing SVG sanitization for production use.
+ * See: https://github.com/darylldoyle/svg-sanitizer
  */
 function headless_allow_svg($mimes) {
     $mimes['svg'] = 'image/svg+xml';

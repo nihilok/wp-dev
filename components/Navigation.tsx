@@ -9,6 +9,7 @@
  */
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export interface MenuItem {
   label: string
@@ -33,7 +34,15 @@ export const Navigation: React.FC<NavigationProps> = ({
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             {logo ? (
-              <img src={logo} alt={siteName} className="h-8" />
+              <div className="relative h-8 w-32">
+                <Image 
+                  src={logo} 
+                  alt={`${siteName} logo`}
+                  fill
+                  className="object-contain"
+                  sizes="128px"
+                />
+              </div>
             ) : (
               <span className="text-xl font-bold">{siteName}</span>
             )}

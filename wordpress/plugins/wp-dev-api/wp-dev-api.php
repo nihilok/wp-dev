@@ -18,6 +18,11 @@ if (!defined('ABSPATH')) {
  */
 add_action('rest_api_init', function () {
     
+    // NOTE: All endpoints use '__return_true' for permission_callback,
+    // allowing unauthenticated public access. This is intentional for a headless CMS
+    // where content is meant to be publicly accessible. Consider implementing
+    // rate limiting at the server/middleware level to prevent abuse.
+    
     // Custom endpoint: Get site information
     register_rest_route('wp-dev/v1', '/site-info', array(
         'methods' => 'GET',

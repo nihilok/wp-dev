@@ -9,8 +9,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'localhost',
       },
+      // Add specific domains for production images
+      // Example:
+      // {
+      //   protocol: 'https',
+      //   hostname: 'your-wordpress-domain.com',
+      // },
     ],
   },
   env: {

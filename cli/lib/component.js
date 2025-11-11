@@ -133,7 +133,11 @@ export async function component(options) {
   const config = { ...options, ...answers }
   const componentName = config.name
   const componentType = config.type
-  const kebabName = componentName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+  // Convert PascalCase to kebab-case (handles consecutive capitals correctly)
+  const kebabName = componentName
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z])(?=[a-z])/g, '$1-$2')
+    .toLowerCase()
 
   const spinner = ora('Generating component...').start()
 

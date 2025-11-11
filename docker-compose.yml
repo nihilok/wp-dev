@@ -9,6 +9,7 @@ services:
       - "8080:80"
     environment:
       WORDPRESS_DB_HOST: db
+      # NOTE: Change these credentials for production deployments!
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
@@ -27,6 +28,7 @@ services:
     image: mysql:8.0
     container_name: wp-dev-db
     environment:
+      # NOTE: Change these credentials for production deployments!
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress

@@ -56,7 +56,7 @@ This document describes the architecture of the headless WordPress template with
 - Code splitting
 
 **Technologies:**
-- Next.js 15 (React 18)
+- Next.js 15 (React 19)
 - TypeScript
 - Tailwind CSS
 - Bun runtime

@@ -17,7 +17,10 @@ WP_API_URL = os.getenv("WP_API_URL", "http://wordpress:80/wp-json/wp/v2")
 CACHE_ENABLED = os.getenv("CACHE_ENABLED", "false").lower() == "true"
 
 # Cache storage (in-memory for simplicity, use Redis in production)
+# Using dict with timestamps for basic TTL support
 cache = {}
+cache_timestamps = {}
+CACHE_MAX_SIZE = 1000  # Prevent unbounded growth
 
 
 @asynccontextmanager
@@ -40,9 +43,10 @@ app = FastAPI(
 )
 
 # CORS middleware
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=allowed_origins,  # Configure via ALLOWED_ORIGINS env var
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -64,16 +68,38 @@ async def fetch_from_wordpress(endpoint: str) -> dict:
 
 
 def get_cached(key: str) -> Optional[dict]:
-    """Get data from cache"""
+    """Get data from cache with TTL check"""
     if not CACHE_ENABLED:
         return None
-    return cache.get(key)
+    
+    # Check if key exists and hasn't expired
+    if key in cache and key in cache_timestamps:
+        import time
+        if time.time() - cache_timestamps[key] < 300:  # 5 minute TTL
+            return cache.get(key)
+        else:
+            # Remove expired entry
+            cache.pop(key, None)
+            cache_timestamps.pop(key, None)
+    
+    return None
 
 
 def set_cached(key: str, value: dict, ttl: int = 60):
-    """Set data in cache (simplified - use Redis with TTL in production)"""
+    """Set data in cache with TTL and size limit"""
     if CACHE_ENABLED:
+        import time
+        
+        # Implement simple size limit - remove oldest entries if cache is too large
+        if len(cache) >= CACHE_MAX_SIZE:
+            # Remove oldest 20% of entries
+            sorted_keys = sorted(cache_timestamps.items(), key=lambda x: x[1])
+            for k, _ in sorted_keys[:CACHE_MAX_SIZE // 5]:
+                cache.pop(k, None)
+                cache_timestamps.pop(k, None)
+        
         cache[key] = value
+        cache_timestamps[key] = time.time()
 
 
 @app.get("/")
